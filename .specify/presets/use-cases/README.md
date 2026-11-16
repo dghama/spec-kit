@@ -20,6 +20,26 @@ assumptions belong in Open Questions for the Product Owner. New use cases are
 Draft; approval is explicit and requires an empty Open Questions section.
 Use `/speckit-clarify` to update an existing linked use case.
 
+Before feature-scoped commands, the agent runs
+`.\scripts\resolve-feature-context.ps1`. On a branch such as
+`feature/PROJ-123-user-auth`, it verifies `specs/PROJ-123-user-auth/spec.md`
+and updates the checkout-local `.specify/feature.json`. It stops on missing
+paths or conflicting `SPECIFY_FEATURE_DIRECTORY` / `SPECIFY_FEATURE` values.
+Clear those variables if they refer to a different feature. The resolver also
+stops when `SPECIFY_FEATURE_NO_PERSIST` is enabled rather than writing state.
+
+On app-managed or other nonmatching branches, select a feature explicitly:
+
+```powershell
+.\scripts\resolve-feature-context.ps1 -FeatureDirectory 'specs/PROJ-123-user-auth'
+```
+
+The agent must ask for that selection when running a feature-scoped command.
+The resolver does not run on checkout, for `/speckit-specify` when creating a
+new feature, or for direct calls to Spec Kit scripts. Direct callers must run
+it themselves first. Avoid running commands for different features at the
+same time in one checkout because they share `feature.json`.
+
 The standard PowerShell template resolver requires Python 3 and PyYAML. If
 Windows resolves `python3` to a nonfunctional Microsoft Store alias, set
 `$env:SPECKIT_PYTHON_EXECUTABLE` to the path of a working Python executable
