@@ -1,0 +1,3 @@
+scripts:
+  - name: Check Spec Kit setup
+    command: specify check
