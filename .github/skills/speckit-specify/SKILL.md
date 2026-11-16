@@ -62,6 +62,44 @@ below, but retain its pre- and post-hooks, feature directory resolution,
 feature.json persistence, and completion reporting. Apply the Jira naming preset
 too when installed; decide the use case ID before any branch or file changes.
 
+### Updating an existing use case
+
+When the user explicitly asks `/speckit-specify` to update an existing use
+case, stay in the specify workflow. "Edit in place" changes the document
+target, not the command lifecycle. Do not switch to `/speckit-clarify` or
+skip the mandatory `before_specify` hook. These update rules override
+conflicting new-feature, Jira directory-naming, and UC-number allocation
+instructions; all other naming checks and hooks still apply.
+
+1. Read the requested use case and locate the existing `FEATURE_DIR/spec.md`
+   pointer. Resolve its link relative to the pointer's directory and verify
+   that it targets the requested use case. If the target is missing or
+   ambiguous, stop and ask the user before changing files or branches.
+2. Derive `GIT_BRANCH_NAME` from the current Jira story and its short name,
+   not from the existing use case's Jira reference or UC ID. Keep
+   `SPECIFY_FEATURE_DIRECTORY` set to the existing feature directory;
+   preserve its pointer. Set `SPECIFY_FEATURE` to the current story's branch,
+   not the existing use case's branch.
+   Do not allocate a UC number or create a new use case or feature directory.
+   Ask before changing conflicting explicit environment overrides.
+3. Execute the enabled mandatory `before_specify` hooks. The Git hook must
+   receive `GIT_BRANCH_NAME` in the same process that runs its branch script.
+   Stop if the hook is missing, disabled, not executable, or fails. Emitting
+   an `EXECUTE_COMMAND` block or loading a hook skill alone is not execution.
+4. Before writing any file, and again if the branch changes, verify with Git
+   that the current branch exactly matches `GIT_BRANCH_NAME` and that the
+   existing pointer still resolves to the requested use case. Stop on any
+   mismatch; never edit on `main` as a fallback. Do not replace these checks
+   with the new-feature context resolver, which derives a directory from
+   the story branch rather than the existing use case.
+5. After branch verification, persist the existing feature directory in
+   `.specify/feature.json`. Edit only sections affected by the story. Preserve
+   the existing use case ID, filename, and item IDs; continue numbering for new items. Retain
+   evidence-based writing, clarification questions, quality validation,
+   `after_specify` hooks, and completion reporting in this workflow.
+
+### Creating a new use case
+
 - A new feature has one authoritative use case under
   `docs/use-cases/UC-NNN-<slug>.md` and a pointer at `FEATURE_DIR/spec.md`.
   The slug is a concise goal name of one to five lowercase ASCII words,
@@ -77,8 +115,10 @@ too when installed; decide the use case ID before any branch or file changes.
   issue was selected, ask the user for a numeric UC ID. Scan all existing
   `docs/use-cases/UC-<number>-*.md` files by numeric ID, not just filename.
   If that ID is already in use, ask the user for a different unused numeric
-  ID; do not overwrite or silently renumber. Use `/speckit-clarify` to
-  update an existing linked use case instead of creating a new feature.
+  ID; do not overwrite or silently renumber. An explicit request to update
+  an existing use case follows the update workflow above. Use
+  `/speckit-clarify` for a standalone clarification of an existing feature,
+  not as a replacement for an invoked `/speckit-specify` lifecycle.
 - Resolve `use-case-template` using the project's standard template resolver
   and use the composed template as the use case structure. Stop if resolution
   fails. On Windows, if `python3` is an unusable Microsoft Store alias, find

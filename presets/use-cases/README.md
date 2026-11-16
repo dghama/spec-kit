@@ -22,7 +22,17 @@ When there is no Jira issue or the number is already in use (including by
 another Jira project), the workflow asks for an unused number. Unsupported
 assumptions belong in Open Questions for the Product Owner. New use cases are
 Draft; approval is explicit and requires an empty Open Questions section.
-Use `/speckit-clarify` to update an existing linked use case.
+Use `/speckit-clarify` for standalone clarification of an existing feature.
+To incorporate a new Jira story into an existing use case, explicitly ask
+`/speckit-specify` to update that file in place. The specify workflow still
+executes its mandatory branch hook using the current story's Jira key and
+short name, then verifies the branch and existing pointer before writing.
+It preserves the existing use case ID, filename, item IDs, feature directory,
+and pointer; new items continue the existing numbering. It does not create
+a new use case or feature directory. Missing or failed mandatory hooks and
+branch or pointer mismatches stop the update rather than allowing edits on
+`main`. Clarification questions stay within the specify lifecycle, including
+its validation and post-hooks.
 
 Before feature-scoped commands, the agent runs
 `.\scripts\resolve-feature-context.ps1`. On a branch such as
