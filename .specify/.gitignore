@@ -5,6 +5,9 @@
 # switch features, so it is per-checkout state rather than something to share.
 feature.json
 
+# Downloaded preset catalog cache.
+presets/.cache/
+
 # Per-machine extension config overrides.
 extensions/*/local-config.yml
 
