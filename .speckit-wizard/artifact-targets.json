@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "entries": {
+    "commands/speckit.git.remote": {
+      "description": "Detect the Git remote URL for integration with GitHub services",
+      "source": "llm",
+      "skillPath": ".specify/extensions/git/commands/speckit.git.remote.md"
+    },
+    "commands/speckit.git.validate": {
+      "description": "Validate that the current Git branch follows expected feature branch naming conventions",
+      "source": "llm",
+      "skillPath": ".specify/extensions/git/commands/speckit.git.validate.md"
+    }
+  },
+  "updatedAt": "2026-11-16T13:14:49.509Z"
+}
