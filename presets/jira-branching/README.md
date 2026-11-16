@@ -8,11 +8,12 @@ specify preset add --dev .\presets\jira-branching
 ```
 
 Invoke `/speckit-specify` with a Jira issue key and a feature description,
-for example `PROJ-123 Add user authentication`. The workflow derives one
-short name and uses `feature/PROJ-123-user-auth` for the Git branch and
-`specs/PROJ-123-user-auth` for the specification directory. The precise
-short name is derived from the description. Without a Jira key, the normal
-Spec Kit numbering behavior remains in effect.
+for example `PROJ-123 Add user authentication`. The workflow lowercases the
+Jira key, derives a one-to-five-word lowercase ASCII slug, and uses the same
+name in `feature/proj-123-user-auth` for the Git branch and
+`specs/proj-123-user-auth` for the specification directory. Accents are
+removed from the slug. Without a Jira key, the normal Spec Kit numbering
+behavior remains in effect.
 
 The Git extension must be installed and its `before_specify` hook enabled.
 The usual `.specify/feature.json` pointer identifies the spec for downstream

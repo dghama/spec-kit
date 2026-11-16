@@ -7,8 +7,13 @@ too when installed; decide the use case ID before any branch or file changes.
 
 - A new feature has one authoritative use case under
   `docs/use-cases/UC-NNN-<slug>.md` and a pointer at `FEATURE_DIR/spec.md`.
-  The slug is a concise lowercase hyphenated goal name. Use the same slug as
-  the feature short name when the Jira naming preset selects one.
+  The slug is a concise goal name of one to five lowercase ASCII words,
+  hyphen-separated, with accents removed and punctuation omitted. Use this
+  exact slug as the feature short name, branch short name, and use-case
+  filename suffix. When the Jira naming preset is installed, lowercase the
+  Jira key in the branch and feature directory too; for example, use
+  `feature/proj-123-user-auth`, `specs/proj-123-user-auth`, and
+  `docs/use-cases/UC-123-user-auth.md`. Keep the `UC-` identifier uppercase.
 - Derive the numeric part of `UC-NNN` from the selected Jira issue number,
   preserving its numeric value and padding to at least three digits
   (`PROJ-7` becomes `UC-007`; larger numbers are not truncated). If no Jira
