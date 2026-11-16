@@ -21,9 +21,9 @@ if ($LASTEXITCODE -ne 0 -or -not $branch) {
 }
 $branch = ($branch | Select-Object -First 1)
 
-$featurePattern = '^[A-Z][A-Z0-9]*-[0-9]+-[a-z0-9]+(?:-[a-z0-9]+)*$'
+$featurePattern = '^[a-z][a-z0-9]*-[0-9]+-[a-z0-9]+(?:-[a-z0-9]+){0,4}$'
 $derivedName = $null
-if ($branch -cmatch '^feature/([A-Z][A-Z0-9]*-[0-9]+-[a-z0-9]+(?:-[a-z0-9]+)*)$') {
+if ($branch -cmatch '^feature/([a-z][a-z0-9]*-[0-9]+-[a-z0-9]+(?:-[a-z0-9]+){0,4})$') {
     $derivedName = $Matches[1]
 }
 

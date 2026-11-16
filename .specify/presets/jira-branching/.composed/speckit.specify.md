@@ -24,22 +24,27 @@ specification steps.
 1. Look for Jira issue keys in the user's feature description. A key consists
    of a project key beginning with a letter, followed by letters or digits,
    a hyphen, and one or more digits (for example `PROJ-123`). Match keys
-   case-insensitively and normalize the selected key to uppercase.
+   case-insensitively and normalize the selected key to lowercase for branch
+   and feature-directory names.
 2. If there are multiple distinct keys, ask the user which one identifies the
    feature before doing anything that changes files or branches. If there is
    no key, use the standard workflow below without setting Jira overrides.
-3. For a single selected key, derive one concise 2-4 word lowercase,
-   hyphen-separated short name using letters and digits from the feature
-   description, excluding the issue key. If the description does not provide
-   enough information to derive a meaningful name, ask for a feature
-   description.
+3. For a single selected key, derive one concise short name from the feature
+   description, excluding the issue key. Use one to five words, lowercase
+   ASCII letters or digits, and hyphens between words. Remove accents
+   (normalize accented letters to their unaccented ASCII equivalents), omit
+   punctuation, and do not leave spaces, underscores, or non-ASCII characters.
+   If the description does not provide enough information to derive a
+   meaningful name, ask for a feature description.
 4. Treat the following as explicitly supplied values for this invocation:
-   - `GIT_BRANCH_NAME=feature/<KEY>-<short-name>`
-   - `SPECIFY_FEATURE_DIRECTORY=specs/<KEY>-<short-name>`
-   - `SPECIFY_FEATURE=feature/<KEY>-<short-name>`
-   Use the same key and short name in all three. Do not use a stale value from
-   an earlier invocation. If the user also supplied a conflicting explicit
-   override, ask which value to use before changing anything.
+   - `GIT_BRANCH_NAME=feature/<lowercase-key>-<short-name>`
+   - `SPECIFY_FEATURE_DIRECTORY=specs/<lowercase-key>-<short-name>`
+   - `SPECIFY_FEATURE=feature/<lowercase-key>-<short-name>`
+   Use the same lowercase Jira key and exact short name in all three. The
+   short name must have no more than five hyphen-separated words. Do not use a
+   stale value from an earlier invocation. If the user also supplied a
+   conflicting explicit override, ask which value to use before changing
+   anything.
 5. Before creating a branch, verify that Git is available, that the Git
    `before_specify` hook is enabled and executable, and that the branch name
    is valid and at most 244 UTF-8 bytes. Stop with an error if any check fails.
@@ -64,8 +69,13 @@ too when installed; decide the use case ID before any branch or file changes.
 
 - A new feature has one authoritative use case under
   `docs/use-cases/UC-NNN-<slug>.md` and a pointer at `FEATURE_DIR/spec.md`.
-  The slug is a concise lowercase hyphenated goal name. Use the same slug as
-  the feature short name when the Jira naming preset selects one.
+  The slug is a concise goal name of one to five lowercase ASCII words,
+  hyphen-separated, with accents removed and punctuation omitted. Use this
+  exact slug as the feature short name, branch short name, and use-case
+  filename suffix. When the Jira naming preset is installed, lowercase the
+  Jira key in the branch and feature directory too; for example, use
+  `feature/proj-123-user-auth`, `specs/proj-123-user-auth`, and
+  `docs/use-cases/UC-123-user-auth.md`. Keep the `UC-` identifier uppercase.
 - Derive the numeric part of `UC-NNN` from the selected Jira issue number,
   preserving its numeric value and padding to at least three digits
   (`PROJ-7` becomes `UC-007`; larger numbers are not truncated). If no Jira

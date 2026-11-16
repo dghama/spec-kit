@@ -8,7 +8,11 @@ specify preset add --dev .\presets\use-cases
 
 `/speckit-specify PROJ-123 Add user authentication` creates a use case such as
 `docs/use-cases/UC-123-user-auth.md` and keeps only a relative link in
-`specs/PROJ-123-user-auth/spec.md`. The use case is the authoritative source;
+`specs/proj-123-user-auth/spec.md`. With the Jira branching preset installed,
+the branch is `feature/proj-123-user-auth`. Keep the same lowercase ASCII
+slug, with at most five hyphen-separated words and no accents, in the branch,
+feature directory, and use-case filename; the `UC-` identifier stays
+uppercase. The use case is the authoritative source;
 planning, clarification, tasks, analysis, checklists, implementation, and
 convergence read it through the pointer. Existing full `spec.md` files keep
 their normal behavior.
@@ -22,7 +26,7 @@ Use `/speckit-clarify` to update an existing linked use case.
 
 Before feature-scoped commands, the agent runs
 `.\scripts\resolve-feature-context.ps1`. On a branch such as
-`feature/PROJ-123-user-auth`, it verifies `specs/PROJ-123-user-auth/spec.md`
+`feature/proj-123-user-auth`, it verifies `specs/proj-123-user-auth/spec.md`
 and updates the checkout-local `.specify/feature.json`. It stops on missing
 paths or conflicting `SPECIFY_FEATURE_DIRECTORY` / `SPECIFY_FEATURE` values.
 Clear those variables if they refer to a different feature. The resolver also
@@ -31,7 +35,7 @@ stops when `SPECIFY_FEATURE_NO_PERSIST` is enabled rather than writing state.
 On app-managed or other nonmatching branches, select a feature explicitly:
 
 ```powershell
-.\scripts\resolve-feature-context.ps1 -FeatureDirectory 'specs/PROJ-123-user-auth'
+.\scripts\resolve-feature-context.ps1 -FeatureDirectory 'specs/proj-123-user-auth'
 ```
 
 The agent must ask for that selection when running a feature-scoped command.
