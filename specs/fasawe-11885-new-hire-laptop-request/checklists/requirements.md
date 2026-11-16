@@ -17,7 +17,7 @@
 - [ ] Request lifecycle and duplicate prevention are fully unambiguous — the definition of an "active" request is an open Product Owner question.
 - [x] Main success scenario and failure paths are defined from available Jira acceptance criteria
 - [ ] UI reference is available — no mockup or UI link was provided.
-- [ ] Related Jira work is confirmed — the listed child tasks describe Android sign-in, not laptop requests.
+- [x] Related Jira work is confirmed — the listed child tasks describe Android sign-in, not laptop requests.
 - [x] Scope boundaries, preconditions, and dependencies are identified
 
 ## Feature Readiness
