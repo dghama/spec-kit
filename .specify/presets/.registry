@@ -15,6 +15,27 @@
         ]
       },
       "installed_at": "2026-11-16T13:54:14.495638+00:00"
+    },
+    "use-cases": {
+      "version": "1.0.0",
+      "source": "local",
+      "manifest_hash": "sha256:f57817c1565029380688b008667d6d357b6f74d257814d7e19739a7210ee628a",
+      "enabled": true,
+      "priority": 10,
+      "registered_commands": {},
+      "registered_skills": {
+        "copilot": [
+          "speckit-specify",
+          "speckit-clarify",
+          "speckit-plan",
+          "speckit-tasks",
+          "speckit-analyze",
+          "speckit-checklist",
+          "speckit-implement",
+          "speckit-converge"
+        ]
+      },
+      "installed_at": "2026-11-16T14:22:16.023171+00:00"
     }
   }
 }
