@@ -26,6 +26,18 @@
 - **Rationale**: These behaviors are explicit in BR-004 and BR-005 and their alternative and success flows.
 - **Alternatives considered**: Allow rejection without explanation or infer additional timestamp behavior for other statuses; rejected because neither is supported by the use case.
 
+### Limit detail edits and preserve request history
+
+- **Decision**: Allow detail edits only for Pending, Approved, and In Progress requests; allow changing only to an available laptop profile and requested equipment specifications. Preserve the request ID, record the update time and responsible administrator, and retain prior request information in update history.
+- **Rationale**: Preconditions and BR-009 through BR-013 explicitly define edit eligibility, editable fields, validation, stable identity, and history.
+- **Alternatives considered**: Allow edits in Ready or Rejected status, permit employee/onboarding edits, or replace the request; rejected because each conflicts with the use case.
+
+### Reject stale detail saves
+
+- **Decision**: Compare the edit's source state with the latest saved request and reject stale saves, asking the administrator to reload. Do not prescribe a version field, lock, or storage-specific concurrency mechanism.
+- **Rationale**: The clarified concurrency flow requires stale-save rejection and preservation of the other administrator's changes, while the implementation stack is unknown.
+- **Alternatives considered**: Last-write-wins or silently merging stale edits; rejected because either could overwrite saved changes or hide the conflict. A specific optimistic-locking mechanism is deferred until the target application is identified.
+
 ### Use an interaction contract rather than an API contract
 
 - **Decision**: Document the IT administrator and manager-facing behavior as a UI contract; do not define API endpoints or payload schemas.
@@ -38,4 +50,4 @@ The current repository has feature specifications and Spec Kit tooling but no ap
 
 ## Open Questions
 
-The linked use case has no currently identified Product Owner questions. The use case remains Draft and has not been approved; this plan does not treat its Draft status as approval.
+The linked use case has no currently identified Product Owner questions. The use case remains Draft and has not been approved; this plan does not treat its Draft status as approval. The target application repository, technology stack, persistence mechanism, and test runner are not identified in this repository; they must be established before implementation-specific design or runnable project commands can be supplied.
