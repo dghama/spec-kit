@@ -18,6 +18,12 @@
 
 **UI:** No approved mockup is referenced in the Jira story; follow existing application conventions.
 
+## Clarifications
+
+### Session 2026-11-17
+
+- Q: If two IT administrators edit the same laptop request at once, what should happen when the second administrator saves changes based on outdated data? → A: Reject the stale save and ask the administrator to reload the latest request before trying again.
+
 ## Preconditions
 
 - Laptop requests have been submitted by managers through [UC-11885: Request a Laptop for a New Hire](./UC-11885-new-hire-laptop-request.md).
@@ -82,6 +88,16 @@
 1. The system prevents the update and displays validation messages for the invalid fields.
 2. The existing request details and request ID remain unchanged. The IT administrator can correct the values and retry.
 3. Use case continues at step 8.
+
+### A5: Another administrator updates the request before the current edit is saved
+
+**Trigger:** The IT administrator attempts to save changes based on request details that another administrator has already updated.
+
+**Flow:**
+
+1. The system rejects the stale save and asks the IT administrator to reload the latest request before trying again.
+2. The other administrator's saved changes remain intact.
+3. Use case continues at step 4.
 
 ## Postconditions
 
@@ -156,6 +172,10 @@ For each successful detail update, the system records the update date and time a
 
 If detail validation fails, the system prevents the update, displays appropriate validation messages, and leaves the existing request information unchanged.
 
+### BR-014: Concurrent detail updates
+
+If another administrator updates a request before the current edit is saved, the system rejects the stale save and requires the IT administrator to reload the latest request before retrying. The previously saved changes remain intact.
+
 ## Out of Scope
 
 - Submitting a new laptop request; that flow is defined in UC-11885.
@@ -164,4 +184,4 @@ If detail validation fails, the system prevents the update, displays appropriate
 
 ## Open Questions
 
-None currently identified from the Jira acceptance criteria and clarifications. For FASAWE-11886, editable details are limited to the laptop profile and requested equipment specifications.
+None currently identified. For FASAWE-11886, editable details are limited to the laptop profile and requested equipment specifications.
