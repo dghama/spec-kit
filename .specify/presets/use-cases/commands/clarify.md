@@ -3,6 +3,10 @@
 Before any hook or prerequisite step below, run
 `.\scripts\resolve-feature-context.ps1` from the repository root and check its
 exit status. Stop on failure; never use an old `.specify/feature.json`.
+If the branch-derived feature directory is missing, the resolver may match the
+branch Jira key against the primary or Related Jira on use cases linked by an
+existing feature spec. It resolves only a unique match; multiple matches still
+require an explicit selection.
 On a branch that does not match `feature/<JIRA-ID>-<short-name>`, ask the user
 to select an existing `specs/<JIRA-ID>-<short-name>` directory explicitly,
 then run the resolver with `-FeatureDirectory` and the selected value. A
