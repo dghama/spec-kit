@@ -45,8 +45,74 @@ if ($FeatureDirectory) {
     Stop-Resolution "Branch '$branch' does not match feature/<JIRA-ID>-<short-name>. Select a feature explicitly with -FeatureDirectory."
 }
 
-$relativePath = "specs/$name"
 $specsRoot = Join-Path $root 'specs'
+if (-not $FeatureDirectory -and $derivedName) {
+    $derivedDirectory = Join-Path $specsRoot $derivedName
+    if (-not (Test-Path -LiteralPath $derivedDirectory)) {
+        $issueMatch = [regex]::Match($derivedName, '^([a-z][a-z0-9]*)-([0-9]+)-')
+        $issueKey = ($issueMatch.Groups[1].Value + '-' + $issueMatch.Groups[2].Value).ToUpperInvariant()
+        $relatedFeatureNames = @()
+
+        foreach ($candidate in Get-ChildItem -LiteralPath $specsRoot -Directory -Force) {
+            if (($candidate.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0) {
+                continue
+            }
+            $candidateSpec = Join-Path $candidate.FullName 'spec.md'
+            if (-not (Test-Path -LiteralPath $candidateSpec -PathType Leaf)) {
+                continue
+            }
+            $candidateSpecItem = Get-Item -LiteralPath $candidateSpec -Force
+            if (($candidateSpecItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0) {
+                continue
+            }
+
+            $specContent = [System.IO.File]::ReadAllText($candidateSpec)
+            $pointer = [regex]::Match($specContent, '(?m)^This feature is specified by\s+\[[^\]]*\]\(([^)\r\n]+)\)')
+            if (-not $pointer.Success) {
+                continue
+            }
+            $useCaseLink = $pointer.Groups[1].Value.Trim()
+            if ([System.Uri]::IsWellFormedUriString($useCaseLink, [System.UriKind]::Absolute)) {
+                continue
+            }
+
+            $useCasePath = [System.IO.Path]::GetFullPath((Join-Path $candidate.FullName ($useCaseLink -replace '/', '\')))
+            $repoPrefix = $root.TrimEnd('\', '/') + [System.IO.Path]::DirectorySeparatorChar
+            $pathComparison = if ([System.IO.Path]::DirectorySeparatorChar -eq '\') {
+                [System.StringComparison]::OrdinalIgnoreCase
+            } else {
+                [System.StringComparison]::Ordinal
+            }
+            if (-not $useCasePath.StartsWith($repoPrefix, $pathComparison) -or
+                -not (Test-Path -LiteralPath $useCasePath -PathType Leaf)) {
+                continue
+            }
+
+            $useCaseItem = Get-Item -LiteralPath $useCasePath -Force
+            if (($useCaseItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint) -ne 0) {
+                continue
+            }
+            $useCaseContent = [System.IO.File]::ReadAllText($useCasePath)
+            $jiraLines = [regex]::Matches($useCaseContent, '(?im)^\s*\*\*(?:Related )?Jira:\*\*[^\r\n]*')
+            foreach ($jiraLine in $jiraLines) {
+                if ($jiraLine.Value -match '(?i)\b([A-Z][A-Z0-9]*-\d+)\b' -and $Matches[1].ToUpperInvariant() -ceq $issueKey) {
+                    $relatedFeatureNames += $candidate.Name
+                    break
+                }
+            }
+        }
+
+        $relatedFeatureNames = @($relatedFeatureNames | Select-Object -Unique)
+        if ($relatedFeatureNames.Count -gt 1) {
+            Stop-Resolution "Branch Jira '$issueKey' matches multiple use-case feature directories. Select one explicitly with -FeatureDirectory."
+        }
+        if ($relatedFeatureNames.Count -eq 1) {
+            $name = $relatedFeatureNames[0]
+        }
+    }
+}
+
+$relativePath = "specs/$name"
 $directory = Join-Path $specsRoot $name
 $specFile = Join-Path $directory 'spec.md'
 foreach ($path in @($specsRoot, $directory, $specFile)) {

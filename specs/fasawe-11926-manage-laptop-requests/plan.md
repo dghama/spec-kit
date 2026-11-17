@@ -1,12 +1,12 @@
 # Implementation Plan: Manage Laptop Requests for New Hires
 
-**Branch**: `feature/fasawe-11926-manage-laptop-requests` | **Date**: 2026-11-16 | **Spec**: [spec.md](./spec.md)
+**Branch**: `feature/fasawe-11886-update-laptop-request-details` | **Date**: 2026-11-17 | **Spec**: [spec.md](./spec.md)
 
 **Input**: The linked authoritative use case [UC-11926](../../docs/use-cases/UC-11926-manage-laptop-requests.md), referenced by [spec.md](./spec.md).
 
 ## Summary
 
-Enable authorized IT administrators to review submitted laptop requests, search and filter the request list, and update a request to any of the five listed statuses. Require a reason for rejection, record the date and time when a request is marked Ready, and make the updated status visible to its manager. Managers may view their own requests but cannot change statuses. The use case is Draft. The implementation target repository and stack were not provided, so this plan defines behavior and validation without selecting technologies or an application architecture.
+Enable authorized IT administrators to review submitted laptop requests, search and filter the request list, update eligible request details, and select any of the five listed statuses. Detail edits are limited to the laptop profile and requested equipment specifications, preserve the request ID, record administrator and update time, retain prior values in history, and reject stale saves. Require a reason for rejection, record the date and time when a request is marked Ready, and make the updated status visible to its manager. Managers may view their own requests but cannot change request details or status. The use case is Draft. The implementation target repository and stack were not provided, so this plan defines behavior and validation without selecting technologies or an application architecture.
 
 ## Technical Context
 
@@ -24,17 +24,17 @@ Enable authorized IT administrators to review submitted laptop requests, search 
 
 **Performance Goals**: None stated in the use case.
 
-**Constraints**: Follow existing application conventions because no approved mockup is referenced. Equipment must be prepared before a request is marked Ready. A rejection reason is mandatory. Managers may view only their own submitted requests and cannot change their statuses.
+**Constraints**: Follow existing application conventions because no approved mockup is referenced. Equipment must be prepared before a request is marked Ready. A rejection reason is mandatory. Detail edits are allowed only while status is Pending, Approved, or In Progress; employee and onboarding information are not editable through this flow. Only an available laptop profile may be selected. Managers may view only their own submitted requests and cannot change request details or statuses. A stale detail save must be rejected.
 
-**Scale/Scope**: Manage submitted laptop requests, including list, detail, search, filtering, and status updates. No throughput, volume, or latency targets are specified.
+**Scale/Scope**: Manage submitted laptop requests, including list, detail, search, filtering, eligible detail edits with history and stale-save protection, and status updates. No throughput, volume, or latency targets are specified.
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-**Pre-design: PASS.** The feature can be designed without violating the constitution. Implementation work must include focused tests for request listing and detail behavior, status updates, rejection validation, Ready timestamp recording, and role-based access, plus updates to directly affected documentation.
+**Pre-design: PASS.** The behavior-level design can proceed without selecting an unsupported application stack. Implementation work must include focused tests for request listing, search and filtering, detail-edit eligibility and validation, request identity and update history, stale-save rejection, status updates, rejection validation, Ready timestamp recording, and role-based access, plus updates to directly affected documentation.
 
-**Post-design: PASS.** The design preserves the use case's Draft status, specifies no unsupported application technologies or API, and has no unresolved Product Owner questions. The implementation target and test runner remain unspecified because no target application repository was provided.
+**Post-design: PASS.** The design preserves the use case's Draft status, defines a behavior-level UI contract rather than unsupported technologies or APIs, and has no unresolved Product Owner questions. The implementation target and test runner remain unspecified because no target application repository was provided; identifying that target remains a prerequisite to implementation-specific tasks.
 
 ## Project Structure
 

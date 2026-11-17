@@ -30,6 +30,18 @@
 - [x] Equipment assignment is excluded according to the Product Owner's answer
 - [x] No unresolved Product Owner questions remain based on the provided story and answers
 
+## FASAWE-11886: Update Laptop Request Details
+
+- [x] AC1: IT administrators can access the edit action for eligible requests; managers cannot edit request details
+- [x] AC2: Laptop profile changes use an available profile and are validated before saving
+- [x] AC3: Editable details are limited to laptop profile and requested equipment specifications; onboarding-linked employee information cannot be changed through the request
+- [x] AC4: Mandatory values are validated, successful updates preserve the request ID, and the administrator receives confirmation
+- [x] AC5: Successful updates record the date/time and administrator, with prior request information available in update history
+- [x] AC6: Detail editing is limited to Pending, Approved, and In Progress requests; Ready and Rejected requests cannot be edited
+- [x] AC7: Invalid updates are prevented, validation messages are shown, and existing request information remains unchanged
+- [x] Editable field scope reflects the clarification provided: laptop profile and requested equipment specifications only
+- [x] No unresolved questions remain for this story based on its acceptance criteria and the field-scope clarification
+
 ## Notes
 
 - The use case is Draft and has not been approved. Its current lack of Open Questions does not imply approval.
